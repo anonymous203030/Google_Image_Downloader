@@ -9,7 +9,7 @@
     $ Input Number Of Words You Wanna Search: 1 (or the amount of your numbers) <br>
     $ Input word number 1: python (or the word u want) <br>
     $ Input limit:10 (How much images u want to download)<br>
-    $ Input start: 0 (default. Or the word u want) <br>
+    $ Input start: 0 (default. Or the start number) <br>
     That's All! Hope you Like It! 
     
 </h4>
