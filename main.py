@@ -138,6 +138,17 @@ class ImageDownloader:
         print('Database Execution time: ', time.time() - time0)
         return all_urls
 
+    @staticmethod
+    def RefreshDatabase():
+        print('Starting Refreshing Table...')
+        time0 = time.time()
+        conn = sqlite3.connect('Images.db')
+        conn.execute(f'DROP TABLE ImageUrls')
+        conn.execute(f'CREATE TABLE ImageUrls(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, URL TEXT NOT NULL, '
+                     f'NAME TEXT NOT NULL)"')
+        conn.commit()
+        conn.close()
+        print('Refresh Ended Time: ', time.time() - time0)
 
 
 if args.start:
