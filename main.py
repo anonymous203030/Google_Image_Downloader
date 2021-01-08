@@ -45,7 +45,7 @@ class ImageDownloader:
             while j < limit:
                 print('-------Starting-------')
                 if j < start:
-                    j +=1
+                    j += 1
                 else:
                     raw_html_time = time.time()
                     while True:
@@ -63,6 +63,7 @@ class ImageDownloader:
                             if any(extension in object_raw for extension in extensions):
                                 break
                         except Exception as e:
+                            print(e)
                             break
                     all = self.DatabaseInside(object_raw)
                     print(f'{len(all)} in Database.')
@@ -74,7 +75,7 @@ class ImageDownloader:
                         try:
                             print(f'Photo {j} of {word} starting....')
                             r = requests.get(object_raw, allow_redirects=True, timeout=0.3)
-                            if ('html' not in str(r.content)):
+                            if 'html' not in str(r.content):
                                 mime = magic.Magic(mime=True)
                                 file_type = mime.from_buffer(r.content)
                                 file_extension = f'.{file_type.split("/")[1]}'
@@ -98,12 +99,13 @@ class ImageDownloader:
                 j += 1
         return links, keyword_to_search
 
-    def DownloadPage(self, url):
+    @staticmethod
+    def DownloadPage(url):
         try:
             print('Downloading Page')
-            headers = {}
-            headers[
-                'User-Agent'] = "Mozilla/6.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
+            headers = {
+                'User-Agent': "Mozilla/6.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/77.0.3865.90 Safari/537.36"}
             respData = str(urllib.request.urlopen(urllib.request.Request(url, headers=headers)).read())
             print('Downloaded Page')
             return respData
@@ -112,7 +114,8 @@ class ImageDownloader:
             print('ERRORROROROROORORRR', e)
             exit(0)
 
-    def DatabaseConnect(self, urls, keyword):
+    @staticmethod
+    def DatabaseConnect(urls, keyword):
         print('Including into Database')
         time0 = time.time()
         conn = sqlite3.connect('Images.db')
@@ -132,6 +135,7 @@ class ImageDownloader:
         all = conn.execute(f'SELECT URL FROM ImageUrls WHERE URL="{url}"')
         all_urls = all.fetchall()
         conn.close()
+        print('Database Execution time: ', time.time() - time0)
         return all_urls
 
 
