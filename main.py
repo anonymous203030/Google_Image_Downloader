@@ -41,7 +41,7 @@ class ImageDownloader:
             print('DOWNLOAD PAGE TIME:', time.time() - download_page_time)
             end_object = -1
             j = 0
-
+            a = -1
             while j < limit:
                 print('-------Starting-------')
                 if j < start:
@@ -87,7 +87,8 @@ class ImageDownloader:
                                 links.append(object_raw)
                                 print("PHOTO URL TIME", time.time() - photo_url_time)
                                 file_creating = time.time()
-                                dir_direction = str(word) + "_" + str(j) + file_extension
+                                a += 1
+                                dir_direction = str(word) + "_" + str(a) + file_extension
                                 with open(os.path.join(path, dir_direction), 'wb') as file:
                                     file.write(r.content)
                                     self.DatabaseConnect(object_raw, word)
