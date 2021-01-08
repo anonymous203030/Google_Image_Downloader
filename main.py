@@ -35,9 +35,13 @@ class ImageDownloader:
             j = 0
 
             while j < limit:
-                raw_html_time = time.time()
-                while True:
-                    try:
+                print('-------Starting-------')
+                if j < start:
+                    j +=1
+                else:
+                    raw_html_time = time.time()
+                    while True:
+                        try:
 
                             new_line = raw_html.find('"https://', end_object + 1)
                             end_object = raw_html.find('"', new_line + 1)
@@ -129,6 +133,7 @@ if __name__ == '__main__':
     for x in range(number):
         words.append(input(f'Input word number {x + 1}: '))
     time0 = time.time()
-    limit = int(input('Input Limit:'))
-    ImageDownloader().GetUrls(words, limit)
+    limit = int(input('Input Limit: '))
+    start = int(input('Start From Number: '))
+    ImageDownloader().GetUrls(words, start, limit)
     print("TOTAL TIME", time.time() - time0)
