@@ -2,8 +2,16 @@ import os
 import sqlite3
 import urllib.request
 import time
+
+import argparse
 import magic
 import requests
+
+parser = argparse.ArgumentParser(description='For Starting Image Downloading: python3 main.py -start START. '
+                                             'For Refreshing Database: python3 main.py -refresh REFRESH')
+parser.add_argument('-refresh', '--refresh', type=str, help='python3 main.py refresh')
+parser.add_argument('-start', '--start', type=str, help='python3 main.py')
+args = parser.parse_args()
 
 
 class ImageDownloader:
@@ -11,7 +19,7 @@ class ImageDownloader:
         pass
 
     def GetUrls(self, keyword_to_search, start, limit, extensions=None):
-        if extensions == None:
+        if extensions is None:
             extensions = {'.jpg', '.png', '.ico', '.gif', '.jpeg'}
         links = []
         spam = ('https://www.google.com/logos', 'https://www.google.com/favicon.ico')
@@ -116,18 +124,19 @@ class ImageDownloader:
         conn.close()
         return print('Ended Dbase including', time.time() - time0)
 
-    def DatabaseInside(self, url):
+    @staticmethod
+    def DatabaseInside(url):
         print('Executing From Database')
         time0 = time.time()
         conn = sqlite3.connect('Images.db')
         all = conn.execute(f'SELECT URL FROM ImageUrls WHERE URL="{url}"')
         all_urls = all.fetchall()
-        # conn.commit()
         conn.close()
         return all_urls
 
 
-if __name__ == '__main__':
+
+if args.start:
     number = int(input('Input Number Of Words You Wanna Search: '))
     words = []
     for x in range(number):
@@ -137,3 +146,5 @@ if __name__ == '__main__':
     start = int(input('Start From Number: '))
     ImageDownloader().GetUrls(words, start, limit)
     print("TOTAL TIME", time.time() - time0)
+if args.refresh:
+    ImageDownloader().RefreshDatabase()
